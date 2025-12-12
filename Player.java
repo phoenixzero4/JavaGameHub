@@ -133,15 +133,18 @@ public class Player {
 			}
 
 			public void componentMoved(ComponentEvent e) {
-				// displayMessage(e.getComponent().getClass().getName() + " --- Moved");
+				// displayMessage(e.getComponent().getClass().getName() + " ---
+				// Moved");
 			}
 
 			public void componentResized(ComponentEvent e) {
-				// displayMessage(e.getComponent().getClass().getName() + " --- Resized ");
+				// displayMessage(e.getComponent().getClass().getName() + " ---
+				// Resized ");
 			}
 
 			public void componentShown(ComponentEvent e) {
-				// displayMessage(e.getComponent().getClass().getName() + " --- Shown");
+				// displayMessage(e.getComponent().getClass().getName() + " ---
+				// Shown");
 
 			}
 		});
@@ -176,15 +179,18 @@ public class Player {
 			}
 
 			public void componentMoved(ComponentEvent e) {
-				// displayMessage(e.getComponent().getClass().getName() + " --- Moved");
+				// displayMessage(e.getComponent().getClass().getName() + " ---
+				// Moved");
 			}
 
 			public void componentResized(ComponentEvent e) {
-				// displayMessage(e.getComponent().getClass().getName() + " --- Resized ");
+				// displayMessage(e.getComponent().getClass().getName() + " ---
+				// Resized ");
 			}
 
 			public void componentShown(ComponentEvent e) {
-				// displayMessage(e.getComponent().getClass().getName() + " --- Shown");
+				// displayMessage(e.getComponent().getClass().getName() + " ---
+				// Shown");
 
 			}
 		});

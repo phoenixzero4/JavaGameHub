@@ -1,10 +1,10 @@
 
-
 import java.util.Random;
 
 public class Shape {
 	protected enum Tetrominoe {
-		NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape, MirroredLShape
+		NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape,
+		MirroredLShape
 	}
 
 	public Tetrominoe pieceShape;
@@ -17,10 +17,14 @@ public class Shape {
 
 	public void initShape() {
 		coords = new int[4][2];
-		coordsTable = new int[][][] { { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
-				{ { 0, -1 }, { 0, 0 }, { -1, 0 }, { -1, 1 } }, { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } },
-				{ { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 2 } }, { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 0, 1 } },
-				{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } }, { { -1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } },
+		coordsTable = new int[][][] {
+				{ { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+				{ { 0, -1 }, { 0, 0 }, { -1, 0 }, { -1, 1 } },
+				{ { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } },
+				{ { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 2 } },
+				{ { -1, 0 }, { 0, 0 }, { 1, 0 }, { 0, 1 } },
+				{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } },
+				{ { -1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } },
 				{ { 1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } } };
 
 		setShape(Tetrominoe.NoShape);
@@ -56,7 +60,7 @@ public class Shape {
 	}
 
 	public void setRandomShape() {
-		var r = new Random();
+		Random r = new Random();
 		int x = Math.abs(r.nextInt()) % 7 + 1;
 
 		Tetrominoe[] values = Tetrominoe.values();
@@ -67,7 +71,6 @@ public class Shape {
 		int m = coords[0][0];
 		for (int i = 0; i < 4; i++) {
 			m = Math.min(m, coords[i][0]);
-
 		}
 		return m;
 	}
@@ -84,7 +87,7 @@ public class Shape {
 		if (pieceShape == Tetrominoe.SquareShape) {
 			return this;
 		}
-		var result = new Shape();
+		Shape result = new Shape();
 		result.pieceShape = pieceShape;
 
 		for (int i = 0; i < 4; ++i) {
@@ -98,7 +101,7 @@ public class Shape {
 		if (pieceShape == Tetrominoe.SquareShape) {
 			return this;
 		}
-		var result = new Shape();
+		Shape result = new Shape();
 		result.pieceShape = pieceShape;
 
 		for (int i = 0; i < 4; ++i) {

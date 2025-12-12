@@ -98,7 +98,8 @@ public class TetrisBoard extends JPanel {
 				Shape.Tetrominoe shape = shapeAt(j, BOARD_HEIGHT - i - 1);
 
 				if (shape != Shape.Tetrominoe.NoShape) {
-					drawSquare(g, j * squareWidth(), boardTop + i * squareHeight(), shape);
+					drawSquare(g, j * squareWidth(),
+							boardTop + i * squareHeight(), shape);
 				}
 			}
 		}
@@ -108,7 +109,8 @@ public class TetrisBoard extends JPanel {
 				int x = curX + curPiece.x(i);
 				int y = curY - curPiece.y(i);
 
-				drawSquare(g, x * squareWidth(), boardTop + (BOARD_HEIGHT - y - 1) * squareHeight(),
+				drawSquare(g, x * squareWidth(),
+						boardTop + (BOARD_HEIGHT - y - 1) * squareHeight(),
 						curPiece.getShape());
 			}
 		}
@@ -236,8 +238,8 @@ public class TetrisBoard extends JPanel {
 			statusBar.setText("Lines: " + numLinesRemoved + " Score: " + score);
 			isFallingFinished = true;
 			/*
-			 * try { TimeUnit.MILLISECONDS.sleep(500); }catch(InterruptedException e) {
-			 * System.err.println(e); }
+			 * try { TimeUnit.MILLISECONDS.sleep(500);
+			 * }catch(InterruptedException e) { System.err.println(e); }
 			 */
 			curPiece.setShape(Shape.Tetrominoe.NoShape);
 		}
@@ -245,13 +247,16 @@ public class TetrisBoard extends JPanel {
 
 	private void drawSquare(Graphics g, int x, int y, Shape.Tetrominoe shape) {
 
-		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), new Color(102, 204, 102),
-				new Color(102, 102, 204), new Color(204, 204, 102), new Color(204, 102, 204), new Color(102, 204, 204),
-				new Color(218, 170, 0) };
+		Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102),
+				new Color(102, 204, 102), new Color(102, 102, 204),
+				new Color(204, 204, 102), new Color(204, 102, 204),
+				new Color(102, 204, 204), new Color(218, 170, 0) };
 
 		// brighter pastel colors
-		Color colors2[] = { new Color(0, 0, 0), new Color(255, 0, 250), new Color(0, 131, 255), new Color(0, 255, 114),
-				new Color(246, 255, 0), new Color(127, 0, 255), new Color(255, 0, 182), new Color(218, 170, 0) };
+		Color colors2[] = { new Color(0, 0, 0), new Color(255, 0, 250),
+				new Color(0, 131, 255), new Color(0, 255, 114),
+				new Color(246, 255, 0), new Color(127, 0, 255),
+				new Color(255, 0, 182), new Color(218, 170, 0) };
 
 		var color = colors2[shape.ordinal()];
 
@@ -263,8 +268,10 @@ public class TetrisBoard extends JPanel {
 		g.drawLine(x, y, x + squareWidth() - 1, y);
 
 		g.setColor(color.darker());
-		g.drawLine(x + 1, y + squareHeight() - 1, x + squareWidth() - 1, y + squareHeight() - 1);
-		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
+		g.drawLine(x + 1, y + squareHeight() - 1, x + squareWidth() - 1,
+				y + squareHeight() - 1);
+		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1,
+				x + squareWidth() - 1, y + 1);
 	}
 
 	private void doGameCycle() {

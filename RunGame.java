@@ -37,7 +37,8 @@ public class RunGame implements Runnable {
 			@Override
 			public void windowClosing(WindowEvent we) {
 				System.out.println("Closed tetris game");
-				System.out.println("Score is " + game.findScore() + "for " + name);
+				System.out.println(
+						"Score is " + game.findScore() + "for " + name);
 				score = game.findScore();
 
 			}

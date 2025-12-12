@@ -42,19 +42,21 @@ import javax.swing.text.StyleContext;
 
 public class GameHubGUI extends JFrame implements ActionListener {
 
+	static String name;
 	private static final long serialVersionUID = 1L;
 	private JPanel textPanel, inputPanel;
 	private JTextField textField;
-	private String message, name, line;
+	private String message, line;
 	private Font meiryoFont = new Font("Meiryo", Font.PLAIN, 14);
-	private Border blankBorder = BorderFactory.createEmptyBorder(10, 10, 20, 10);// top,r,b,l
+	private Border blankBorder = BorderFactory.createEmptyBorder(10, 10, 20,
+			10);// top,r,b,l
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
 
 	protected JTextArea textArea, userArea;
 	protected JFrame frame;
-	protected JButton privateMsgButton, sendPrivateButton, cancelDMButton, joinButton, sendButton, tetrisButton,
-			snakeButton, exitButton;
+	protected JButton privateMsgButton, sendPrivateButton, cancelDMButton,
+			joinButton, sendButton, tetrisButton, snakeButton, exitButton;
 	protected JPanel clientPanel, userPanel;
 	protected String[] games;
 
@@ -98,8 +100,8 @@ public class GameHubGUI extends JFrame implements ActionListener {
 
 		// -----------------------------------------
 		/*
-		 * intercept close method, inform server we are leaving then let the system
-		 * exit.
+		 * intercept close method, inform server we are leaving then let the
+		 * system exit.
 		 */
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
@@ -107,7 +109,7 @@ public class GameHubGUI extends JFrame implements ActionListener {
 
 				if (this != null) {
 					try {
-						out.println("EXIT" + name);
+						out.println("EXIT " + name);
 						// close client
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -176,8 +178,8 @@ public class GameHubGUI extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Method to build the panel displaying currently connected users with a call to
-	 * the button panel building method
+	 * Method to build the panel displaying currently connected users with a
+	 * call to the button panel building method
 	 */
 	public JPanel getUsersPanel() {
 
@@ -210,7 +212,7 @@ public class GameHubGUI extends JFrame implements ActionListener {
 			int i = 1;
 			String next = (String) iterator.next();
 			if (next.equals(name)) {
-				next += " (you)";
+				next += " (YOU)";
 			}
 			listModel.addElement(next);
 		}
@@ -249,18 +251,18 @@ public class GameHubGUI extends JFrame implements ActionListener {
 		privateMsgButton.addActionListener(this);
 		privateMsgButton.setEnabled(false);
 
-		sendPrivateButton = new JButton("Send Private Message");
+		sendPrivateButton = new JButton("Send DM");
 		sendPrivateButton.setEnabled(false);
 		sendPrivateButton.addActionListener(this);
 
 		exitButton = new JButton("Leave ");
 		exitButton.addActionListener(this);
 		exitButton.setBackground(Color.gray);
-		exitButton.setForeground(Color.cyan);
+		exitButton.setForeground(Color.red);
 
 		tetrisButton = new JButton("Tetris ");
 		tetrisButton.setBackground(Color.gray);
-		tetrisButton.setForeground(Color.cyan);
+		tetrisButton.setForeground(Color.red);
 		tetrisButton.addActionListener(this);
 
 		snakeButton = new JButton("Snake ");
@@ -291,7 +293,7 @@ public class GameHubGUI extends JFrame implements ActionListener {
 		try {
 
 			if (e.getSource() == joinButton) {
-				out.println("CHALLENGE:" + name);
+				out.println("CHALLENGE: " + name);
 				textArea.append("\n* * * Waiting for Opponent * * *\n");
 				if (player == null) {
 					player = new Player(name, out);
@@ -305,7 +307,7 @@ public class GameHubGUI extends JFrame implements ActionListener {
 			}
 
 			if (e.getSource() == exitButton) {
-				out.println("EXIT" + name);
+				out.println("EXIT " + name);
 				System.exit(0);
 			}
 
@@ -346,17 +348,18 @@ public class GameHubGUI extends JFrame implements ActionListener {
 			if (e.getSource() == textField) {
 				if (sendPrivateButton.isEnabled()) {
 					sendPrivate();
-				} else if (!sendPrivateButton.isEnabled() && sendButton.isEnabled()) {
+				} else if (!sendPrivateButton.isEnabled()
+						&& sendButton.isEnabled()) {
 					message = textField.getText();
 					textField.setText("");
-					out.println("MESSAGE" + message);
+					out.println("MESSAGE " + message);
 				}
 			}
 
 			if (e.getSource() == sendButton) {
 				message = textField.getText();
 				textField.setText("");
-				out.println("MESSAGE" + message);
+				out.println("MESSAGE " + message);
 			}
 
 		} catch (Exception ex) {
@@ -374,29 +377,32 @@ public class GameHubGUI extends JFrame implements ActionListener {
 	private void sendPrivate() {
 		message = textField.getText();
 		textField.setText("");
-		out.println("DM" + privateName + ":" + message + ":" + name);
+		out.println("DM" + privateName + ":" + message + ":" + name + "\n");
 
-		textArea.append("DM to " + privateName + ":  " + message);
+		textArea.append("DM to " + privateName + ":  " + message + "\n");
 		sendPrivateButton.setEnabled(false);
 		sendButton.setEnabled(true);
 	}
 
 	private static String getServerAddress() {
-		return JOptionPane.showInputDialog(null, "Enter IP Address of the Server:", "Welcome to Java Game Hub",
+		return JOptionPane.showInputDialog(null,
+				"Enter IP Address of the Server:", "Welcome to Java Game Hub",
 				JOptionPane.QUESTION_MESSAGE);
 	}
 
 	private static String getPlayerName() {
-		return JOptionPane.showInputDialog(null, "Choose a screen name:", "Enter Username" + "",
-				JOptionPane.PLAIN_MESSAGE);
+		return JOptionPane.showInputDialog(null, "Choose a screen name:",
+				"Enter Username" + "", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	private static boolean connectToServer(String address) {
 		boolean connected = false;
 		serverAddress = address;
+		int port = 8000;
 		try {
-			socket = new Socket(address, 9001);
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			socket = new Socket(address, port);
+			in = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream(), true);
 			connected = true;
 		} catch (Exception exception) {
@@ -446,7 +452,8 @@ public class GameHubGUI extends JFrame implements ActionListener {
 					msg += "\nPrevious hi-score: " + oldScore;
 					textArea.append(msg);
 					player.addScore(score, "TETRIS");
-					System.out.println("Updating highscore to " + score + " from " + oldScore);
+					System.out.println("Updating highscore to " + score
+							+ " from " + oldScore);
 				} else {
 					msg = "\nPrevious Hi-score: " + oldScore;
 				}
@@ -495,10 +502,13 @@ public class GameHubGUI extends JFrame implements ActionListener {
 
 	private void appendToPane(JTextPane tp, String msg, Color c) {
 		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+				StyleConstants.Foreground, c);
 
-		aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-		aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+		aset = sc.addAttribute(aset, StyleConstants.FontFamily,
+				"Lucida Console");
+		aset = sc.addAttribute(aset, StyleConstants.Alignment,
+				StyleConstants.ALIGN_JUSTIFIED);
 
 		int len = tp.getDocument().getLength();
 		tp.setCaretPosition(len);
@@ -519,7 +529,8 @@ public class GameHubGUI extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String address, name;
+		String address;
+		
 
 		if (args.length < 1) {
 			address = getServerAddress();
@@ -527,29 +538,25 @@ public class GameHubGUI extends JFrame implements ActionListener {
 			try {
 				if (connectToServer(address)) {
 					name = getPlayerName();
-					name = name.substring(0, 1).toUpperCase() + name.substring(1);
-					if (checkName(name)) {
+					name = name.substring(0, 1).toUpperCase()
+							+ name.substring(1);
+					while(!checkName(name)) {
+						System.err.println("Name already taken.\nTry again");
+						name = tryToGetPlayerName();
+					}
 						GameHubGUI gamehub = new GameHubGUI(name);
 						currentUsers.add(name);
 						gamehub.updateUsers(currentUsers);
-
 						gamehub.run();
 					} else {
-						System.err.println("Name already taken.\nTry again");
-						System.exit(1);
-						// TODO create a method so we can loop this rather than
-						// exiting
-					}
-				} else {
 					System.err.println("No server at " + address);
 					System.exit(0);
 				}
-			} catch (ClassCastException cce) {
-				cce.printStackTrace();
-			} catch (Exception exception) {
-				System.err.println(exception);
-				exception.printStackTrace();
+			} catch (ClassCastException ex) {
+				ex.printStackTrace();		
+				System.err.println(ex);
 			}
+			
 
 		} else if (args.length == 2) {
 			address = args[0];
@@ -557,30 +564,31 @@ public class GameHubGUI extends JFrame implements ActionListener {
 
 			try {
 				if (connectToServer(address)) {
-					name = name.substring(0, 1).toUpperCase() + name.substring(1);
-					if (checkName(name)) {
-
+					name = getPlayerName();
+					name = name.substring(0, 1).toUpperCase()
+							+ name.substring(1);
+					while(!checkName(name)) {
+						System.err.println("Name already taken.\nTry again");
+						name = tryToGetPlayerName();
+					}
 						GameHubGUI gamehub = new GameHubGUI(name);
 						currentUsers.add(name);
 						gamehub.updateUsers(currentUsers);
 						gamehub.run();
-
 					} else {
-						System.err.println("Name already taken.\nTry again");
-						System.exit(1);
-						// TODO create a method so we can loop this rather than
-						// exiting
-					}
-				} else {
 					System.err.println("No server at " + address);
 					System.exit(0);
 				}
-			} catch (ClassCastException cce) {
-				cce.printStackTrace();
-			} catch (Exception exception) {
-				System.err.println(exception);
-				exception.printStackTrace();
+			} catch (ClassCastException ex) {
+				ex.printStackTrace();		
+				System.err.println(ex);
 			}
 		}
+	}
+	
+	public static String tryToGetPlayerName() throws IOException {
+		System.out.println("Enter your name: ");
+		name = getPlayerName();
+		return name;
 	}
 }// end class

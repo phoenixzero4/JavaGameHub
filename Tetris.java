@@ -45,20 +45,21 @@ public class Tetris extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 
-		board.addPropertyChangeListener("enabled", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				if (!board.isEnabled()) {
-					try {
-						TimeUnit.SECONDS.sleep(2);
+		board.addPropertyChangeListener("enabled",
+				new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent e) {
+						if (!board.isEnabled()) {
+							try {
+								TimeUnit.SECONDS.sleep(2);
 
-					} catch (InterruptedException ie) {
-						ie.printStackTrace();
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}
+						}
 					}
-				}
-			}
 
-		});
+				});
 	}
 
 	public JLabel getStatusBar() {

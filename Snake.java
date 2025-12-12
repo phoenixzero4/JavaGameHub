@@ -19,10 +19,10 @@ public class Snake {
 	}
 
 	private void loadImages() {
-		var iih = new ImageIcon("head.png");
+		ImageIcon iih = new ImageIcon("head.png");
 		head = iih.getImage();
 
-		var iib = new ImageIcon("dot.png");
+		ImageIcon iib = new ImageIcon("dot.png");
 		body = iib.getImage();
 	}
 

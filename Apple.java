@@ -12,12 +12,14 @@ public class Apple {
 	private int y;
 	private Image apple;
 
+	
+	
 	public Apple() {
 		loadImage();
 	}
 
 	private void loadImage() {
-		var iia = new ImageIcon("apple.png");
+		ImageIcon iia = new ImageIcon("apple.png");
 		apple = iia.getImage();
 
 	}

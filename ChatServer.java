@@ -22,20 +22,27 @@ import javax.swing.JTextArea;
 public class ChatServer extends JFrame {
 
 	/**
-	 * The port that the server listens on.
+	 * 
 	 */
-	private static final int PORT = 9001;
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * The set of all names of clients in the chat room. Maintained so that we can
-	 * check that new clients are not registering name already in use.
+	 * The port that the server listens on.
 	 */
+	private static final int PORT = 8000;
+
+	/**
+	 * The set of all names of clients in the chat room. Maintained so that we
+	 * can check that new clients are not registering name already in use.
+	 */
+	
 	private static HashSet<String> names = new HashSet<String>();
 
 	/**
-	 * The set of all the print writers for all the clients. This set is kept so we
-	 * can easily broadcast messages.
+	 * The set of all the print writers for all the clients. This set is kept so
+	 * we can easily broadcast messages.
 	 */
+	
 	private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
 	private static HashMap<String, Player> userMap = new HashMap<>();
 	private static ArrayList<Player> playerList = new ArrayList<>();
@@ -52,8 +59,9 @@ public class ChatServer extends JFrame {
 	} // no arg default constructor
 
 	/**
-	 * A handler thread class. Handlers are spawned from the listening loop and are
-	 * responsible for a dealing with a single client and broadcasting its messages.
+	 * A handler thread class. Handlers are spawned from the listening loop and
+	 * are responsible for a dealing with a single client and broadcasting its
+	 * messages.
 	 */
 	static class Handler extends Thread {
 		private String name;
@@ -70,13 +78,15 @@ public class ChatServer extends JFrame {
 		}
 
 		/**
-		 * Waits for a unique screen name, registers the client and handles messages
+		 * Waits for a unique screen name, registers the client and handles
+		 * messages
 		 */
 		public void run() {
 			try {
 
 				// Create character streams for the socket.
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				in = new BufferedReader(
+						new InputStreamReader(socket.getInputStream()));
 				out = new PrintWriter(socket.getOutputStream(), true);
 				playerCount = 0;
 				waitingCount = 0;
@@ -94,7 +104,8 @@ public class ChatServer extends JFrame {
 
 							for (PrintWriter writer : writers) {
 								if (writer != out) {
-									writer.println("MESSAGE " + name + " has joined the server");
+									writer.println("MESSAGE " + name
+											+ " has joined the server");
 								}
 							}
 							break;
@@ -102,9 +113,7 @@ public class ChatServer extends JFrame {
 					}
 				}
 
-				// Now that a unique name has been registered, add the
-				// socket's print writer to the set of all writers so
-				// this client can receive broadcast messages.
+				// Now that a unique name has been registered, add the socket's print writer to the set of all writers so this client can receive broadcast messages.
 				out.println("NAMEACCEPTED");
 				Player player = new Player(name, out);
 				player.setPort(socket.getPort());
@@ -114,11 +123,10 @@ public class ChatServer extends JFrame {
 				writers.add(out);
 				for (PrintWriter writer : writers) {
 					for (String s : names) {
-						writer.println("UPDATE" + s);
+						writer.println("UPDATE " + s);
 					}
 				}
-				// Accept messages from this client and broadcast them.
-				// Ignore other clients that cannot be broadcasted to.
+				// Accept messages from this client and broadcast them. Ignore other clients that cannot be broadcasted to.
 				String input;
 				while (true) {
 					while ((input = in.readLine()) == null) {
@@ -144,8 +152,8 @@ public class ChatServer extends JFrame {
 						}
 
 						/*
-						 * wait for both players to finish their games and report to each the other's
-						 * score and the winner
+						 * wait for both players to finish their games and
+						 * report to each the other's score and the winner
 						 */
 					} else if (input.startsWith("GETSCORE")) {
 
@@ -156,7 +164,8 @@ public class ChatServer extends JFrame {
 
 						if (waitingCount >= waitingPlayers.length) {
 							PrintWriter pzero = waitingPlayers[0].getWriter();
-							int scorezero = waitingPlayers[0].getScore("TETRIS");
+							int scorezero = waitingPlayers[0]
+									.getScore("TETRIS");
 							String namezero = waitingPlayers[0].getPlayerName();
 							PrintWriter pone = waitingPlayers[1].getWriter();
 							int scoreone = waitingPlayers[1].getScore("TETRIS");
@@ -164,46 +173,66 @@ public class ChatServer extends JFrame {
 
 							String game = "TETRIS";
 
-							int oldscorezero = userMap.get(namezero).getScore(game);
-							int oldscoreone = userMap.get(nameone).getScore(game);
+							int oldscorezero = userMap.get(namezero)
+									.getScore(game);
+							int oldscoreone = userMap.get(nameone)
+									.getScore(game);
 
 							if (scorezero > oldscorezero) {
-								userMap.get(namezero).addScore(scorezero, "TETRIS");
+								userMap.get(namezero).addScore(scorezero,
+										"TETRIS");
 
 							}
 							if (scoreone > oldscoreone) {
-								userMap.get(nameone).addScore(scoreone, "TETRIS");
+								userMap.get(nameone).addScore(scoreone,
+										"TETRIS");
 
 							}
 
 							writeScores(userMap);
 
-							System.out.println("FROM USERMAP\n" + userMap.get(nameone).getPlayerName()
-									+ " high score for tetris " + userMap.get(nameone).getScore("TETRIS"));
-							System.out.println("FROM USERMAP\n" + userMap.get(namezero).getPlayerName()
-									+ " high score for tetris " + userMap.get(namezero).getScore("TETRIS"));
+							System.out.println("FROM USERMAP\n"
+									+ userMap.get(nameone).getPlayerName()
+									+ " high score for tetris "
+									+ userMap.get(nameone).getScore("TETRIS"));
+							System.out.println("FROM USERMAP\n"
+									+ userMap.get(namezero).getPlayerName()
+									+ " high score for tetris "
+									+ userMap.get(namezero).getScore("TETRIS"));
 
-							if (userMap.get(namezero).getScore("TETRIS") < scorezero)
-								System.out.println("Writing" + namezero + " scores to file");
+							if (userMap.get(namezero)
+									.getScore("TETRIS") < scorezero)
+								System.out.println("Writing " + namezero
+										+ " scores to file");
 
-							if (userMap.get(nameone).getScore("TETRIS") < scoreone)
-								System.out.println("Writing" + nameone + " scores to file");
+							if (userMap.get(nameone)
+									.getScore("TETRIS") < scoreone)
+								System.out.println("Writing " + nameone
+										+ " scores to file");
 
 							writeScores(userMap);
 
 							if (scorezero > scoreone) {
-								pzero.println("\nYOU WIN! Your score: " + scorezero + "\n" + nameone + ": " + scoreone);
-								pone.println(
-										"\nYOU LOSE! Your score: " + scoreone + "\n" + namezero + ": " + scorezero);
+								pzero.println("\nYOU WIN! Your score: "
+										+ scorezero + "\n" + nameone + ": "
+										+ scoreone);
+								pone.println("\nYOU LOSE! Your score: "
+										+ scoreone + "\n" + namezero + ": "
+										+ scorezero);
 							} else if (scorezero < scoreone) {
-								pzero.println(
-										"\nYOU LOSE! Your score: " + scorezero + "\n" + nameone + ": " + scoreone);
-								pone.println("\nYOU WIN! Your score: " + scoreone + "\n" + namezero + ": " + scorezero);
+								pzero.println("\nYOU LOSE! Your score: "
+										+ scorezero + "\n" + nameone + ": "
+										+ scoreone);
+								pone.println("\nYOU WIN! Your score: "
+										+ scoreone + "\n" + namezero + ": "
+										+ scorezero);
 							} else {
-								pzero.println(
-										"\nYOU TIE!\n Your score: " + scorezero + "\n" + nameone + ": " + scoreone);
-								pone.println(
-										"\nYOU TIE!\n Your score: " + scoreone + "\n" + namezero + ": " + scorezero);
+								pzero.println("\nYOU TIE!\n Your score: "
+										+ scorezero + "\n" + nameone + ": "
+										+ scoreone);
+								pone.println("\nYOU TIE!\n Your score: "
+										+ scoreone + "\n" + namezero + ": "
+										+ scorezero);
 							}
 							waitingCount = 0;
 							waitingPlayers = new Player[2];
@@ -226,20 +255,31 @@ public class ChatServer extends JFrame {
 					} else if (input.startsWith("DM")) {
 						int index = input.indexOf(":");
 						String name = input.substring(2, index);
+						
+						System.err.println("name: " + name);
+						
 						int index2 = input.lastIndexOf(":");
 						String message = input.substring(index + 1, index2);
+						
 						String user = input.substring(index2 + 1);
-
-						System.out.println("SERVER: DM to " + name + "from user " + user);
-						PrintWriter writer = userMap.get(name).getWriter();
-						writer.println("** DM from " + user + ":  " + message);
+						System.err.println("User: " + user);
+						
+						System.err.println(userMap);
+						System.out.println(
+								"SERVER: DM to " + name + "from user " + user);
+						
+						if(userMap.get(user)!= null) {
+						PrintWriter writer = userMap.get(user).getWriter();
+						writer.println("DM from " + user + ":  " + message);
 						continue;
-
+						}else {
+							System.err.println(user + " does not exist in map");
+						}
 					} else if (input.startsWith("EXIT")) {
 						String exiting = input.substring(4);
 						names.remove(exiting);
 						for (PrintWriter writer : writers) {
-							writer.println("REMOVE" + exiting);
+							writer.println("REMOVE " + exiting);
 							writer.println(exiting + " left the server");
 							userMap.remove(exiting);
 						}
@@ -261,7 +301,7 @@ public class ChatServer extends JFrame {
 						}
 					} else {
 						for (String s : names) {
-							out.println("UPDATE" + s);
+							out.println("UPDATE " + s);
 						}
 					}
 				}
@@ -293,8 +333,10 @@ public class ChatServer extends JFrame {
 		try {
 			PrintWriter pw = new PrintWriter(file);
 
-			map.forEach((key, value) -> pw.println(key + ":" + "TETRIS:" + value.getScore("TETRIS")));
-			map.forEach((key, value) -> System.out.println(key + ":" + "TETRIS:" + value.getScore("TETRIS")));
+			map.forEach((key, value) -> pw
+					.println(key + ":" + "TETRIS: " + value.getScore("TETRIS")));
+			map.forEach((key, value) -> System.out
+					.println(key + ":" + "TETRIS: " + value.getScore("TETRIS")));
 
 			pw.close();
 
